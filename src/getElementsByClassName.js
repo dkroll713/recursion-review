@@ -4,19 +4,36 @@
 // };
 
 // But instead we're going to implement it from scratch:
-var getElementsByClassName = function(className
-) {
+var getElementsByClassName = function(className) {
   var result = [];
   var doc = document.body;
-  for (var x = 0; x < doc.length; x++) {
-    var element = doc[x];
-    if (element.classList.contains(className)) {
-      result.push(element);
-    }
+  var nodes = doc.childNodes;
 
-    if (element.childNodes) {
-
-    }
+  if (doc.classList !== undefined && doc.classList.contains(className)) {
+    result.push(doc);
   }
+
+
+  var recurse = function(thing) {
+    for (var x = 0; x < thing.length; x++) {
+      var element = thing[x];
+      var classes = element.classList;
+      var children = element.childNodes;
+
+      // console.log('current element:', element);
+
+
+      if (classes !== undefined && classes.contains(className)) {
+        result.push(element);
+      }
+
+      if (children) {
+        recurse(children);
+      }
+    }
+    console.log(result);
+    return result;
+  };
+  recurse(nodes);
   return result;
 };
